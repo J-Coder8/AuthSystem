@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.authsystem.controller.FaceController">
+
+    <VBox spacing="20" alignment="CENTER" styleClass="container">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <!-- Header -->
+        <VBox spacing="5" alignment="CENTER">
+            <HBox alignment="CENTER_LEFT">
+                <Button fx:id="backButton" text="Back" styleClass="btn-secondary" onAction="#handleBack"/>
+            </HBox>
+            <Label text="Face Login" styleClass="header-label"/>
+            <Label fx:id="modeLabel" text="Capture your face to login" styleClass="sub-header-label"/>
+        </VBox>
+
+        <!-- Camera Preview Area -->
+        <VBox spacing="10" alignment="CENTER">
+            <StackPane prefWidth="320" prefHeight="240">
+                <!-- Live camera preview -->
+                <ImageView fx:id="previewImageView" fitWidth="320" fitHeight="240"
+                           preserveRatio="true" />
+            </StackPane>
+        </VBox>
+
+        <!-- Status Message -->
+        <Label fx:id="statusLabel" text="" styleClass="label-error" wrapText="true"/>
+
+        <!-- Username Input (for login mode) -->
+        <VBox spacing="5" maxWidth="300">
+            <Label text="Username"/>
+            <TextField fx:id="usernameField" promptText="Enter your username"/>
+        </VBox>
+
+        <!-- Action Buttons -->
+        <VBox spacing="10" alignment="CENTER" maxWidth="300">
+            <!-- Capture Button -->
+            <Button fx:id="captureButton" text="Capture Face" styleClass="btn-primary" 
+                    onAction="#handleCapture" maxWidth="Infinity"/>
+            
+            <!-- Verify Button (for login) -->
+            <Button fx:id="verifyButton" text="Verify Face" styleClass="btn-primary" 
+                    onAction="#handleVerify" maxWidth="Infinity" visible="true"/>
+            
+            <!-- Register Button (for registration) -->
+            <Button fx:id="registerButton" text="Register Face" styleClass="btn-primary" 
+                    onAction="#handleRegister" maxWidth="Infinity" visible="false"/>
+            
+            <!-- Progress Indicator -->
+            <ProgressIndicator fx:id="progressIndicator" progress="-1" 
+                              visible="false" maxWidth="30" maxHeight="30"/>
+        </VBox>
+
+        <!-- Instructions -->
+        <VBox spacing="5" alignment="CENTER" maxWidth="350">
+            <Label text="Instructions:" styleClass="sub-header-label"/>
+            <Label text="1. Enter your username (or it will be auto-filled)" style="-fx-text-fill: #888;" wrapText="true"/>
+            <Label text="2. Make sure your face is clearly visible in the camera" style="-fx-text-fill: #888;" wrapText="true"/>
+            <Label text="3. Click 'Capture Face' to use the current frame" style="-fx-text-fill: #888;" wrapText="true"/>
+            <Label text="4. Click 'Verify Face' or 'Register Face' to continue" style="-fx-text-fill: #888;" wrapText="true"/>
+        </VBox>
+
+        <!-- Back to Login -->
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="Want to login with password?" styleClass="label"/>
+            <Button text="Back to Login" styleClass="btn-secondary" onAction="#handleBack"/>
+        </HBox>
+    </VBox>
+</StackPane>

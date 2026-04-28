@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.authsystem.controller.AdminPanelController">
+
+    <!-- Top Section -->
+    <top>
+        <VBox style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="Admin Panel" 
+                       style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="← Back to Dashboard" styleClass="btn-secondary" 
+                        onAction="#handleBackToDashboard" fx:id="backButton"/>
+                <Button text="Logout" styleClass="btn-danger" 
+                        onAction="#handleLogout"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center Section -->
+    <center>
+        <VBox spacing="20" style="-fx-padding: 20;">
+            
+            <!-- Stats Cards -->
+            <HBox spacing="20" alignment="CENTER">
+                <VBox styleClass="card" prefWidth="200" prefHeight="100" alignment="CENTER">
+                    <Label text="Total Users" styleClass="label-secondary"/>
+                    <Label fx:id="totalUsersLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+                </VBox>
+                <VBox styleClass="card" prefWidth="200" prefHeight="100" alignment="CENTER">
+                    <Label text="Active Users" styleClass="label-secondary"/>
+                    <Label fx:id="activeUsersLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Search and Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Search users..." prefWidth="300"/>
+                <Button text="Search" styleClass="btn-primary" onAction="#handleSearch"/>
+                <Button text="Refresh" styleClass="btn-secondary" onAction="#handleRefresh"/>
+            </HBox>
+
+            <!-- Users Table -->
+            <TableView fx:id="usersTable" prefHeight="350">
+                <columns>
+                    <TableColumn text="ID" prefWidth="50">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="id"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Username" prefWidth="120">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="username"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Email" prefWidth="180">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="email"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Full Name" prefWidth="120">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="fullName"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Role" prefWidth="80">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="role"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Status" prefWidth="80">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="status"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="TOTP" prefWidth="60">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="totpEnabled"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Failed Attempts" prefWidth="120">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="failedAttempts"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Actions" prefWidth="200">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="id"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+
+            <!-- Action Buttons -->
+            <HBox spacing="10">
+                <Button text="Enable User" styleClass="btn-primary" onAction="#handleEnableUser"/>
+                <Button text="Disable User" styleClass="btn-warning" onAction="#handleDisableUser"/>
+                <Button text="Delete User" styleClass="btn-danger" onAction="#handleDeleteUser"/>
+                <Button text="Make Admin" styleClass="btn-secondary" onAction="#handleMakeAdmin"/>
+                <Button text="Remove Admin" styleClass="btn-secondary" onAction="#handleRemoveAdmin"/>
+            </HBox>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox style="-fx-background-color: #ecf0f1; -fx-padding: 10;" alignment="CENTER">
+            <Label text="Admin Panel - User Management" styleClass="label-secondary"/>
+        </HBox>
+    </bottom>
+</BorderPane>
+
