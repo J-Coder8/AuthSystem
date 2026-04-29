@@ -1,8 +1,0 @@
-com\authsystem\controller\LoginController.class
-com\authsystem\controller\AdminPanelController.class
-com\authsystem\controller\DashboardController.class
-com\authsystem\controller\OtpController.class
-com\authsystem\AuthSystemApplication.class
-com\authsystem\controller\RegisterController.class
-com\authsystem\controller\FaceController.class
-com\authsystem\controller\ForgotPasswordController.class
