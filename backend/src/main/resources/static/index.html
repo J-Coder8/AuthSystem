@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuthSystem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50:  '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans antialiased">
+
+  <!-- ===== LOGIN PAGE ===== -->
+  <div id="page-login" class="page hidden">
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+      <div class="w-full max-w-md">
+        <!-- Logo / Brand -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-600 shadow-lg mb-4">
+            <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-900">AuthSystem</h1>
+          <p class="mt-1 text-sm text-gray-500">Secure authentication platform</p>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+          <h2 class="text-xl font-semibold text-gray-800 mb-6">Sign in to your account</h2>
+
+          <div id="login-error" class="hidden mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"></div>
+          <div id="login-info"  class="hidden mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-sm"></div>
+
+          <form id="login-form" class="space-y-5" novalidate>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="login-username">Username</label>
+              <input id="login-username" type="text" autocomplete="username" required
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                placeholder="your_username" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="login-password">Password</label>
+              <div class="relative">
+                <input id="login-password" type="password" autocomplete="current-password" required
+                  class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm pr-10"
+                  placeholder="••••••••" />
+                <button type="button" onclick="togglePassword('login-password', this)"
+                  class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button type="submit" id="login-btn"
+              class="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm">
+              Sign In
+            </button>
+          </form>
+
+          <div class="mt-4 text-center">
+            <button onclick="showPage('page-forgot')" class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+              Forgot password?
+            </button>
+          </div>
+
+          <div class="mt-6 pt-6 border-t border-gray-100 text-center text-sm text-gray-500">
+            Don't have an account?
+            <button onclick="showPage('page-register')" class="ml-1 text-primary-600 hover:text-primary-700 font-semibold">
+              Create one
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== OTP VERIFICATION PAGE ===== -->
+  <div id="page-otp" class="page hidden">
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+      <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-600 shadow-lg mb-4">
+            <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-900">AuthSystem</h1>
+          <p class="mt-1 text-sm text-gray-500">Email verification</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">Enter verification code</h2>
+          <p class="text-sm text-gray-500 mb-6">We sent a one-time code to your email address.</p>
+
+          <div id="otp-error" class="hidden mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"></div>
+
+          <form id="otp-form" class="space-y-5" novalidate>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="otp-code">6-digit code</label>
+              <input id="otp-code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm tracking-widest text-center text-lg font-mono"
+                placeholder="000000" />
+            </div>
+            <button type="submit" id="otp-btn"
+              class="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm">
+              Verify Code
+            </button>
+          </form>
+
+          <div class="mt-4 text-center">
+            <button id="resend-otp-btn" onclick="resendOtp()"
+              class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+              Resend code
+            </button>
+          </div>
+
+          <div class="mt-6 pt-6 border-t border-gray-100 text-center text-sm text-gray-500">
+            <button onclick="showPage('page-login')" class="text-primary-600 hover:text-primary-700 font-semibold">
+              ← Back to login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOTP VERIFICATION PAGE ===== -->
+  <div id="page-totp" class="page hidden">
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+      <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-600 shadow-lg mb-4">
+            <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-900">AuthSystem</h1>
+          <p class="mt-1 text-sm text-gray-500">Authenticator verification</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">Two-factor authentication</h2>
+          <p class="text-sm text-gray-500 mb-6">Enter the 6-digit code from your authenticator app.</p>
+
+          <div id="totp-error" class="hidden mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"></div>
+
+          <form id="totp-form" class="space-y-5" novalidate>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="totp-code">Authenticator code</label>
+              <input id="totp-code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm tracking-widest text-center text-lg font-mono"
+                placeholder="000000" />
+            </div>
+            <button type="submit" id="totp-btn"
+              class="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm">
+              Verify
+            </button>
+          </form>
+
+          <div class="mt-6 pt-6 border-t border-gray-100 text-center text-sm text-gray-500">
+            <button onclick="showPage('page-login')" class="text-primary-600 hover:text-primary-700 font-semibold">
+              ← Back to login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REGISTER PAGE ===== -->
+  <div id="page-register" class="page hidden">
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+      <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-600 shadow-lg mb-4">
+            <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-900">AuthSystem</h1>
+          <p class="mt-1 text-sm text-gray-500">Create your account</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+          <h2 class="text-xl font-semibold text-gray-800 mb-6">Register</h2>
+
+          <div id="register-error"   class="hidden mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"></div>
+          <div id="register-success" class="hidden mb-4 p-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm"></div>
+
+          <form id="register-form" class="space-y-5" novalidate>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="reg-fullname">Full name</label>
+              <input id="reg-fullname" type="text" autocomplete="name" required
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                placeholder="Jane Doe" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="reg-username">Username</label>
+              <input id="reg-username" type="text" autocomplete="username" required
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                placeholder="jane_doe" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="reg-email">Email address</label>
+              <input id="reg-email" type="email" autocomplete="email" required
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                placeholder="jane@example.com" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="reg-password">Password</label>
+              <div class="relative">
+                <input id="reg-password" type="password" autocomplete="new-password" required
+                  class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm pr-10"
+                  placeholder="Min. 8 characters" />
+                <button type="button" onclick="togglePassword('reg-password', this)"
+                  class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                </button>
+              </div>
+              <p class="mt-1 text-xs text-gray-400">Must be at least 8 characters</p>
+            </div>
+            <button type="submit" id="register-btn"
+              class="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm">
+              Create Account
+            </button>
+          </form>
+
+          <div class="mt-6 pt-6 border-t border-gray-100 text-center text-sm text-gray-500">
+            Already have an account?
+            <button onclick="showPage('page-login')" class="ml-1 text-primary-600 hover:text-primary-700 font-semibold">
+              Sign in
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FORGOT PASSWORD PAGE ===== -->
+  <div id="page-forgot" class="page hidden">
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+      <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-600 shadow-lg mb-4">
+            <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-900">AuthSystem</h1>
+          <p class="mt-1 text-sm text-gray-500">Password recovery</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">Reset your password</h2>
+          <p class="text-sm text-gray-500 mb-6">Enter your username or email and we'll send you a reset code.</p>
+
+          <div id="forgot-error"   class="hidden mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"></div>
+          <div id="forgot-success" class="hidden mb-4 p-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm"></div>
+
+          <!-- Step 1: request OTP -->
+          <div id="forgot-step1">
+            <form id="forgot-form" class="space-y-5" novalidate>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="forgot-identifier">Username or email</label>
+                <input id="forgot-identifier" type="text" required
+                  class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                  placeholder="jane_doe or jane@example.com" />
+              </div>
+              <button type="submit" id="forgot-btn"
+                class="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm">
+                Send Reset Code
+              </button>
+            </form>
+          </div>
+
+          <!-- Step 2: enter OTP + new password -->
+          <div id="forgot-step2" class="hidden">
+            <form id="reset-form" class="space-y-5" novalidate>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="reset-code">Reset code</label>
+                <input id="reset-code" type="text" inputmode="numeric" maxlength="6" required
+                  class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm tracking-widest text-center text-lg font-mono"
+                  placeholder="000000" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="reset-password">New password</label>
+                <div class="relative">
+                  <input id="reset-password" type="password" autocomplete="new-password" required
+                    class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm pr-10"
+                    placeholder="Min. 8 characters" />
+                  <button type="button" onclick="togglePassword('reset-password', this)"
+                    class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <button type="submit" id="reset-btn"
+                class="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm">
+                Reset Password
+              </button>
+            </form>
+          </div>
+
+          <div class="mt-6 pt-6 border-t border-gray-100 text-center text-sm text-gray-500">
+            <button onclick="showPage('page-login')" class="text-primary-600 hover:text-primary-700 font-semibold">
+              ← Back to login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD PAGE ===== -->
+  <div id="page-dashboard" class="page hidden">
+    <!-- Top nav -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <span class="font-bold text-gray-900 text-lg">AuthSystem</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span id="nav-username" class="text-sm text-gray-600 hidden sm:block"></span>
+            <button onclick="logout()"
+              class="flex items-center gap-1.5 text-sm text-gray-600 hover:text-red-600 font-medium transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+      <!-- Welcome banner -->
+      <div class="bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-6 mb-8 text-white shadow-lg">
+        <p class="text-primary-100 text-sm font-medium mb-1">Welcome back,</p>
+        <h2 id="dash-fullname" class="text-2xl font-bold mb-1"></h2>
+        <p id="dash-email" class="text-primary-200 text-sm"></p>
+      </div>
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Role</p>
+          <p id="dash-role" class="text-lg font-bold text-gray-800"></p>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">2FA Status</p>
+          <p id="dash-2fa" class="text-lg font-bold text-gray-800"></p>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Last Login</p>
+          <p id="dash-lastlogin" class="text-lg font-bold text-gray-800"></p>
+        </div>
+      </div>
+
+      <!-- Profile card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+        <div class="flex items-center justify-between mb-5">
+          <h3 class="text-base font-semibold text-gray-800">Profile Information</h3>
+          <button onclick="loadProfile()" id="refresh-btn"
+            class="text-xs text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
+
+        <div id="profile-loading" class="text-center py-8 text-gray-400 text-sm">Loading profile…</div>
+        <div id="profile-error"   class="hidden text-center py-8 text-red-500 text-sm"></div>
+
+        <dl id="profile-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+          <div>
+            <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Username</dt>
+            <dd id="p-username" class="mt-0.5 text-sm text-gray-800 font-medium"></dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Full Name</dt>
+            <dd id="p-fullname" class="mt-0.5 text-sm text-gray-800 font-medium"></dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Email</dt>
+            <dd id="p-email" class="mt-0.5 text-sm text-gray-800 font-medium"></dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Phone</dt>
+            <dd id="p-phone" class="mt-0.5 text-sm text-gray-800 font-medium"></dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Location</dt>
+            <dd id="p-location" class="mt-0.5 text-sm text-gray-800 font-medium"></dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Member Since</dt>
+            <dd id="p-created" class="mt-0.5 text-sm text-gray-800 font-medium"></dd>
+          </div>
+          <div class="sm:col-span-2">
+            <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Bio</dt>
+            <dd id="p-bio" class="mt-0.5 text-sm text-gray-800 font-medium"></dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Security card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+        <h3 class="text-base font-semibold text-gray-800 mb-5">Security</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex items-center gap-3 p-4 rounded-xl bg-gray-50">
+            <div id="sec-totp-icon" class="w-9 h-9 rounded-full flex items-center justify-center bg-gray-200">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-800">Authenticator App</p>
+              <p id="sec-totp-status" class="text-xs text-gray-500"></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-4 rounded-xl bg-gray-50">
+            <div id="sec-face-icon" class="w-9 h-9 rounded-full flex items-center justify-center bg-gray-200">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-800">Face Recognition</p>
+              <p id="sec-face-status" class="text-xs text-gray-500"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API info card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-base font-semibold text-gray-800 mb-4">API Endpoints</h3>
+        <div class="space-y-2 text-sm font-mono">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-xs font-bold bg-green-100 text-green-700">POST</span>
+            <span class="text-gray-600">/api/auth/login</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-xs font-bold bg-green-100 text-green-700">POST</span>
+            <span class="text-gray-600">/api/auth/register</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-700">GET</span>
+            <span class="text-gray-600">/api/auth/profile</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-700">GET</span>
+            <span class="text-gray-600">/api/auth/history</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-xs font-bold bg-green-100 text-green-700">POST</span>
+            <span class="text-gray-600">/api/auth/forgot-password</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-xs font-bold bg-yellow-100 text-yellow-700">GET</span>
+            <span class="text-gray-600">/api/health</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
