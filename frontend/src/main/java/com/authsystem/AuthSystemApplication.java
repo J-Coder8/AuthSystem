@@ -6,10 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
-import com.authsystem.controller.DashboardController;
-import com.authsystem.controller.OtpController;
-
 import java.util.prefs.Preferences;
 
 import javafx.application.Application;
@@ -133,7 +129,7 @@ public class AuthSystemApplication extends Application {
                 AuthSystemApplication.class.getResource("/fxml/OtpView.fxml")
             );
             Parent root = loader.load();
-            OtpController controller = loader.getController();
+            com.authsystem.controller.OtpController controller = loader.getController();
             controller.setUsername(username);
             controller.setDeliveryEmail(deliveryEmail);
             controller.setTotpMode(isTotpMode);
@@ -152,6 +148,7 @@ public class AuthSystemApplication extends Application {
         }
     }
 
+
 public static void showDashboardView(String username, String email, String fullName) {
         showDashboardView(username, email, fullName, "USER");
     }
@@ -162,7 +159,7 @@ public static void showDashboardView(String username, String email, String fullN
                 AuthSystemApplication.class.getResource("/fxml/DashboardView.fxml")
             );
             Parent root = loader.load();
-            DashboardController controller = loader.getController();
+            com.authsystem.controller.DashboardController controller = loader.getController();
             controller.setUserInfo(username, email, fullName, role);
             Scene scene = new Scene(root, 800, 600);
             scene.getStylesheets().add(

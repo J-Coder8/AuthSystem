@@ -1093,6 +1093,23 @@
   -fx-background-radius: 999;
 }
 
+.cooldown-bar {
+  -fx-pref-height: 8;
+  -fx-max-height: 8;
+}
+
+.cooldown-bar .track {
+  -fx-background-color: -surface-hover;
+}
+
+.cooldown-bar .bar {
+  -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, -success-color 0%, -warning-color 100%);
+}
+
+.cooldown-bar.cooldown-low .bar {
+  -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, -warning-color 0%, -danger-color 100%);
+}
+
 .hyperlink {
   -fx-text-fill: -accent-color;
 }

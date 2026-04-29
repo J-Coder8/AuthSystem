@@ -640,12 +640,10 @@ private void recordLoginHistory(
             return;
         }
 
-        if (risk != null && !"LOW_RISK".equals(risk.factors())) {
-            String message = "New login from " + ip + " on " + device +
-                    ". Risk: " + risk.score() + "% (" + risk.factors() + ").";
-            String severity = risk.score() >= 60 ? "WARNING" : "INFO";
-            notificationService.createNotification(user, "New login detected", message, "LOGIN", severity);
-        }
+        String riskText = risk != null ? risk.score() + "% (" + risk.factors() + ")" : "not assessed";
+        String message = "Login from " + ip + " on " + device + ". Risk: " + riskText + ".";
+        String severity = risk != null && risk.score() >= 60 ? "WARNING" : "INFO";
+        notificationService.createNotification(user, "Login successful", message, "LOGIN", severity);
     }
 
     private record RiskAssessment(int score, String factors) {}

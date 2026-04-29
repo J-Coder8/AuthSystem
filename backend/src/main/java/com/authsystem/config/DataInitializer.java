@@ -19,20 +19,32 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Create test user if not exists
-        if (!userRepository.existsByUsername("JaytheGreat")) {
+        if (!userRepository.existsByUsername("testuser")) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             User user = new User();
-            user.setUsername("JaytheGreat");
-            user.setEmail("jay@example.com");
-            user.setFullName("Jay the Great");
-            user.setPassword(encoder.encode("Password123!"));
+            user.setUsername("testuser");
+            user.setEmail("testuser@example.com");
+            user.setFullName("Test User");
+            user.setPhone("+1-555-1234");
+            user.setBio("Test user profile");
+            user.setPassword(encoder.encode("Test123!"));
             user.setPasswordChangedAt(LocalDateTime.now());
             user.setEnabled(true);
             user.setRole("USER");
+            user.setEmailNotifications(true);
+            user.setLoginAlerts(true);
             userRepository.save(user);
-            System.out.println("Created test user: JaytheGreat / Password123! / jay@example.com");
+            System.out.println("Created test user: testuser / Test123! / testuser@example.com");
         } else {
-            System.out.println("Test user JaytheGreat already exists.");
+            System.out.println("Test user testuser already exists.");
+        }
+        
+        // Create test notifications
+        User testUser = userRepository.findByUsername("testuser").orElse(null);
+        if (testUser != null) {
+            testUser.setLoginAlerts(true);
+            // Add sample notifications via service if available
+            System.out.println("Test data ready for testuser");
         }
     }
 }

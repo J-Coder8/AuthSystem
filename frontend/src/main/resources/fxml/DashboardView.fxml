@@ -40,7 +40,7 @@
 
     <!-- Center Section - Tabbed Content -->
     <center>
-        <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-padding: 10;" styleClass="dashboard-tabs">
+        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" style="-fx-padding: 10;" styleClass="dashboard-tabs">
             
             <!-- Tab 1: Dashboard Overview -->
             <Tab text="Dashboard">
@@ -188,6 +188,7 @@
                     
                     <VBox styleClass="card" spacing="10">
                         <Label text="Manage your active sessions across devices" styleClass="label-secondary"/>
+                        <Label fx:id="sessionAuthenticatorLabel" text="Authenticator: checking connected accounts..." styleClass="label-secondary"/>
                         
                         <TableView fx:id="sessionsTable" prefWidth="1040" prefHeight="320" maxHeight="320" styleClass="session-table">
                             <columns>
@@ -204,6 +205,11 @@
                                 <TableColumn text="Last Active" prefWidth="150">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="lastActive"/>
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Active For" prefWidth="130">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="activeFor"/>
                                     </cellValueFactory>
                                 </TableColumn>
                                 <TableColumn text="Current" prefWidth="80">
@@ -225,6 +231,7 @@
                         <Label fx:id="sessionDeviceLabel" text="Device: N/A" styleClass="label-secondary"/>
                         <Label fx:id="sessionIpLabel" text="IP Address: N/A" styleClass="label-secondary"/>
                         <Label fx:id="sessionLastActiveLabel" text="Last Active: N/A" styleClass="label-secondary"/>
+                        <Label fx:id="sessionActiveForLabel" text="Active For: N/A" styleClass="label-secondary"/>
                         <Label fx:id="sessionCurrentLabel" text="Current Session: N/A" styleClass="label-secondary"/>
                         <Label fx:id="sessionIdLabel" text="Session ID: N/A" styleClass="label-secondary"/>
                     </VBox>
@@ -258,6 +265,7 @@
                                 <Label text="Authenticator Code (30s)" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
                                 <Label fx:id="totpLiveCodeLabel" text="------" styleClass="totp-code"/>
                                 <Label fx:id="totpLiveCountdownLabel" text="Refreshes in: --s" styleClass="label-secondary"/>
+                                <ProgressBar fx:id="totpCooldownBar" progress="0" prefWidth="260" styleClass="cooldown-bar"/>
                                 <HBox spacing="10">
                                     <Button text="Refresh Code" styleClass="btn-secondary" onAction="#handleRefreshTotpLive"/>
                                 </HBox>
@@ -320,6 +328,7 @@
                     <VBox styleClass="card" spacing="8">
                         <Label fx:id="authenticatorStatusLabel" text="Codes refresh every 30 seconds" styleClass="label-secondary"/>
                         <Label fx:id="authenticatorCountdownLabel" text="Refreshes in: --s" styleClass="label-secondary"/>
+                        <ProgressBar fx:id="authenticatorCooldownBar" progress="0" prefWidth="260" styleClass="cooldown-bar"/>
                         <HBox spacing="10">
                             <Button text="Add Account" styleClass="btn-primary" onAction="#handleAddAuthenticatorAccount"/>
                             <Button text="Delete Selected" styleClass="btn-warning" onAction="#handleDeleteAuthenticatorAccount"/>
